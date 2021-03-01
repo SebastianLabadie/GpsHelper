@@ -69,9 +69,6 @@ import androidx.lifecycle.OnLifecycleEvent
 
 class LocationHelper(private val context: Context, private val mActivity: Activity? = null, private val notificationMessage: String = "Application is running") : LifecycleObserver {
 
-//     ===============STARTING FOR HELPER METHODS===============
-//     Helper methods for starting foreground service and stoping it
-
     /**
      * Method to make this as life cycle aware so you no need to call stop location update, and helpfull when you are calling bindable service
      */
@@ -167,7 +164,7 @@ class LocationHelper(private val context: Context, private val mActivity: Activi
         if (mLocationRequest == null) {
             mLocationRequest = LocationRequest()
             mLocationRequest!!.interval = 1000
-            mLocationRequest!!.fastestInterval = 5000
+            mLocationRequest!!.fastestInterval = 2000
             mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
@@ -194,7 +191,7 @@ class LocationHelper(private val context: Context, private val mActivity: Activi
             if (mLocationCallback != null) {
                 mLocationCallback?.invoke(location)
             }
-            if (isLocationUpdates == false) {
+            if (!isLocationUpdates) {
                 stopLocationUpdates()
             }
         }
@@ -335,6 +332,18 @@ class LocationHelper(private val context: Context, private val mActivity: Activi
 
         fun getLongitude(intent: Intent?): Double {
             return intent?.getDoubleExtra("LNG", 0.0) ?: 0.0
+        }
+
+        fun getSpeed(intent: Intent?): Float {
+            return intent?.getFloatExtra("SPEED", 0.0F) ?: 0.0F
+        }
+
+        fun getAltitude(intent: Intent?): Double {
+            return intent?.getDoubleExtra("ALT", 0.0) ?: 0.0
+        }
+
+        fun getTime(intent: Intent?): Long {
+            return intent?.getLongExtra("TIME", 0) ?: 0
         }
 
         //===========

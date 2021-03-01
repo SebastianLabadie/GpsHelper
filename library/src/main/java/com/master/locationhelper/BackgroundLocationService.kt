@@ -52,30 +52,6 @@ class BackgroundLocationService : Service() {
         const val IS_STOP = "IS_STOP"
         const val NOTIFICATION_MESSAGE = "NOTIFICATION_MESSAGE"
 
-        /*fun bindService(context: Context, mServiceConnection: ServiceConnection) {
-            val locationService = Intent(context, BackgroundLocationService::class.java)
-            context.bindService(locationService, mServiceConnection, Context.BIND_AUTO_CREATE);
-        }
-
-        fun bindAndStartService(context: Context, mServiceConnection: ServiceConnection) {
-            val locationService = Intent(context, BackgroundLocationService::class.java)
-            context.bindService(locationService, mServiceConnection, Context.BIND_AUTO_CREATE);
-            context.startService(locationService)
-        }
-
-        fun startForegroundService(context: Context) {
-            val locationService = Intent(context, BackgroundLocationService::class.java)
-            locationService.putExtra(IS_FOREGROUND, true)
-            context.startService(locationService)
-            ContextCompat.startForegroundService(context, locationService)
-        }
-
-        fun stopService(context: Context) {
-            val locationService = Intent(context, BackgroundLocationService::class.java)
-            locationService.putExtra(IS_STOP, true)
-            context.startService(locationService)
-            context.stopService(locationService)
-        }*/
     }
 
     var sdf = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
@@ -116,13 +92,15 @@ class BackgroundLocationService : Service() {
                 val broadCastIntent = Intent("MASTER_ACTION_LOCATION_UPDATED")
                 broadCastIntent.putExtra("LAT", it.latitude)
                 broadCastIntent.putExtra("LNG", it.longitude)
-                broadCastIntent.setPackage(getApplicationContext().getPackageName())
+                broadCastIntent.putExtra("ALT", it.altitude)
+                broadCastIntent.putExtra("SPEED", it.speed)
+                broadCastIntent.putExtra("TIME", it.time)
+                broadCastIntent.setPackage(applicationContext.packageName)
                 sendOrderedBroadcast(broadCastIntent, null)
             }
             if (isForeground) {
                 startForeground(1, getNotification(notificationMessage))
             } else {
-//                mNotificationManager?.notify( 1, getNotification("Starting of location update normal"))
             }
             return START_STICKY
         }
@@ -142,28 +120,8 @@ class BackgroundLocationService : Service() {
     }
 
     private fun getNotification(text: String): Notification {
-//        val intent = Intent(this, MainActivity::class.java)
-
-        // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
-//        intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true)
-
-        // The PendingIntent that leads to a call to onStartCommand() in this service.
-//        val servicePendingIntent = PendingIntent.getService(
-//            this, 0, intent,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-
-        // The PendingIntent to launch activity.
-//        val activityPendingIntent = PendingIntent.getActivity(
-////            this, 0,
-////            Intent(this, MainActivity::class.java), 0
-////        )
 
         val builder = NotificationCompat.Builder(this, "location")
-            /*    .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
-                        activityPendingIntent)
-                .addAction(R.drawable.ic_cancel, getString(R.string.remove_location_updates),
-                        servicePendingIntent)*/
             .setContentText(text)
             .setContentTitle(getString(R.string.app_name))
             .setOngoing(true)

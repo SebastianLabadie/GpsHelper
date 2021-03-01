@@ -8,6 +8,6 @@ import com.master.locationhelper.LocationHelper
 
 class LocationUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.i("LOCATION_UPDATE", "Lat:${com.master.locationhelper.LocationHelper.getLatitude(intent)},Lng:${com.master.locationhelper.LocationHelper.getLongitude(intent)}")
+        Log.i("LOCATION_UPDATE", "Speed:${LocationHelper.getSpeed(intent)},Altitude:${LocationHelper.getAltitude(intent)}, Time: ${LocationHelper.getTime(intent)}")
     }
 }
